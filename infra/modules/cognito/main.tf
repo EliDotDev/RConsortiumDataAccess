@@ -22,24 +22,7 @@ variable "presignup_lambda_name" {
 resource "random_id" "domain_suffix" {
   byte_length = 4
 }
-# --- Disable user self-registration ---
-resource "aws_cognito_user_pool_policy" "main" {
-  user_pool_id = aws_cognito_user_pool.main.id
 
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Deny"
-        Action = [
-          "cognito-idp:SignUp"
-        ]
-        Resource = "*"
-        Principal = "*"
-      }
-    ]
-  })
-}
 # --- Cognito User Pool ---
 resource "aws_cognito_user_pool" "main" {
   name = var.user_pool_name
@@ -48,6 +31,9 @@ resource "aws_cognito_user_pool" "main" {
   username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
 
+  admin_create_user_config {
+    allow_admin_create_user_only = false
+  }
   # Password policy
   password_policy {
     minimum_length    = 8
