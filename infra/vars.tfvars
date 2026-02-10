@@ -2,9 +2,7 @@ aws_region      = "us-east-1"
 dvc_bucket_name = "rconsortium-pilots"
 
 allowed_emails = [
-  "alice@company-a.com",
-  "bob@company-b.com",
-  "charlie@company-c.com",
+  "elimillera@gmail.com"
 ]
 
 # 8 hours in seconds
