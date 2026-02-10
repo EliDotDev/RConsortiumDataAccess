@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>R Consortium Pilots — DVC Credentials</title>
+  <style>
+    :root {
+      --blue-600: #2563eb;
+      --blue-700: #1d4ed8;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --green-600: #16a34a;
+      --green-100: #dcfce7;
+      --red-600: #dc2626;
+      --red-100: #fee2e2;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 720px;
+      width: 100%;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      color: var(--gray-900);
+      margin-bottom: 0.25rem;
+    }
+
+    header p {
+      color: var(--gray-600);
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card h2 {
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+      color: var(--gray-900);
+    }
+
+    .login-section {
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .login-section p {
+      margin-bottom: 1.5rem;
+      color: var(--gray-600);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--blue-600);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--blue-700);
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .credential-row {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+    }
+
+    .credential-row label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-600);
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .credential-value {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .credential-value code {
+      flex: 1;
+      background: var(--gray-100);
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.375rem;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      font-size: 0.8rem;
+      word-break: break-all;
+      border: 1px solid var(--gray-200);
+    }
+
+    .copy-btn {
+      background: var(--gray-100);
+      border: 1px solid var(--gray-300);
+      color: var(--gray-700);
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      background: var(--gray-200);
+    }
+
+    .copy-btn.copied {
+      background: var(--green-100);
+      color: var(--green-600);
+      border-color: var(--green-600);
+    }
+
+    .code-block {
+      background: var(--gray-900);
+      color: #e5e7eb;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .code-block .copy-block-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #e5e7eb;
+    }
+
+    .code-block .copy-block-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .code-block .copy-block-btn.copied {
+      background: var(--green-600);
+      color: white;
+      border-color: var(--green-600);
+    }
+
+    .expiry-note {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      margin-top: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--gray-50);
+      border-radius: 0.375rem;
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.375rem;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .status-bar.success {
+      background: var(--green-100);
+      color: var(--green-600);
+    }
+
+    .status-bar.error {
+      background: var(--red-100);
+      color: var(--red-600);
+    }
+
+    .status-bar.loading {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+
+    .hidden { display: none; }
+
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      color: var(--gray-600);
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>R Consortium Pilots</h1>
+      <p>DVC Data Access Portal</p>
+    </header>
+
+    <!-- Login State -->
+    <div id="login-view" class="card login-section">
+      <p>Sign in with your registered email to get temporary AWS credentials for DVC.</p>
+      <a id="login-btn" class="btn btn-primary" href="#">Sign In</a>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-view" class="hidden">
+      <div class="card">
+        <div class="status-bar loading">
+          ⏳ Exchanging token for AWS credentials...
+        </div>
+      </div>
+    </div>
+
+    <!-- Credentials State -->
+    <div id="credentials-view" class="hidden">
+      <div class="status-bar success">
+        ✅ Authenticated — temporary credentials generated
+      </div>
+
+      <div class="card">
+        <h2>Your Temporary AWS Credentials</h2>
+
+        <div class="credential-row">
+          <label>Access Key ID</label>
+          <div class="credential-value">
+            <code id="access-key"></code>
+            <button class="btn btn-sm copy-btn" onclick="copyText('access-key', this)">Copy</button>
+          </div>
+        </div>
+
+        <div class="credential-row">
+          <label>Secret Access Key</label>
+          <div class="credential-value">
+            <code id="secret-key"></code>
+            <button class="btn btn-sm copy-btn" onclick="copyText('secret-key', this)">Copy</button>
+          </div>
+        </div>
+
+        <div class="credential-row">
+          <label>Session Token</label>
+          <div class="credential-value">
+            <code id="session-token" style="max-height: 4rem; overflow-y: auto;"></code>
+            <button class="btn btn-sm copy-btn" onclick="copyText('session-token', this)">Copy</button>
+          </div>
+        </div>
+
+        <div class="expiry-note" id="expiry-note"></div>
+      </div>
+
+      <div class="card">
+        <h2>DVC Remote Configuration</h2>
+        <p style="font-size: 0.9rem; color: var(--gray-600); margin-bottom: 1rem;">
+          Run these commands in your project directory to configure DVC:
+        </p>
+        <div class="code-block">
+          <button class="btn btn-sm copy-block-btn" onclick="copyBlock('dvc-setup', this)">Copy</button>
+          <pre id="dvc-setup"></pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Environment Variables (Alternative)</h2>
+        <p style="font-size: 0.9rem; color: var(--gray-600); margin-bottom: 1rem;">
+          Or export these environment variables — DVC will pick them up automatically:
+        </p>
+        <div class="code-block">
+          <button class="btn btn-sm copy-block-btn" onclick="copyBlock('env-vars', this)">Copy</button>
+          <pre id="env-vars"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-view" class="hidden">
+      <div class="status-bar error">
+        ❌ <span id="error-message">Something went wrong.</span>
+      </div>
+      <div class="card login-section">
+        <p>Please try signing in again.</p>
+        <a id="retry-btn" class="btn btn-primary" href="#">Sign In</a>
+      </div>
+    </div>
+
+    <footer>
+      Credentials are valid for 8 hours. Return to this page to generate new ones.
+    </footer>
+  </div>
+
+  <!-- AWS SDK -->
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1692.0.min.js"></script>
+  <script>
+    // Configuration injected by Terraform
+    const CONFIG = {
+      region: '${aws_region}',
+      userPoolId: '${user_pool_id}',
+      clientId: '${client_id}',
+      identityPoolId: '${identity_pool_id}',
+      cognitoDomain: '${cognito_domain}',
+      dvcBucket: '${dvc_bucket_name}',
+      dvcEndpointUrl: '${dvc_endpoint_url}',
+    };
+
+    const COGNITO_LOGIN_URL = 'https://' + CONFIG.cognitoDomain +
+      '.auth.' + CONFIG.region + '.amazoncognito.com/login' +
+      '?client_id=' + CONFIG.clientId +
+      '&response_type=token' +
+      '&scope=openid+email+profile' +
+      '&redirect_uri=' + encodeURIComponent(window.location.origin + window.location.pathname);
+
+    // Set login buttons
+    document.getElementById('login-btn').href = COGNITO_LOGIN_URL;
+    const retryBtn = document.getElementById('retry-btn');
+    if (retryBtn) retryBtn.href = COGNITO_LOGIN_URL;
+
+    // --- View management ---
+    function showView(viewId) {
+      ['login-view', 'loading-view', 'credentials-view', 'error-view']
+        .forEach(id => document.getElementById(id).classList.add('hidden'));
+      document.getElementById(viewId).classList.remove('hidden');
+    }
+
+    // --- Copy helpers ---
+    function copyText(elementId, btn) {
+      const text = document.getElementById(elementId).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    function copyBlock(elementId, btn) {
+      const text = document.getElementById(elementId).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    // --- Token exchange ---
+    async function exchangeTokenForCredentials(idToken) {
+      showView('loading-view');
+
+      try {
+        const providerKey = 'cognito-idp.' + CONFIG.region + '.amazonaws.com/' + CONFIG.userPoolId;
+        const logins = {};
+        logins[providerKey] = idToken;
+
+        AWS.config.region = CONFIG.region;
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+          IdentityPoolId: CONFIG.identityPoolId,
+          Logins: logins,
+        });
+
+        await AWS.config.credentials.getPromise();
+
+        const creds = AWS.config.credentials;
+        const accessKey = creds.accessKeyId;
+        const secretKey = creds.secretAccessKey;
+        const sessionToken = creds.sessionToken;
+        const expiry = creds.expireTime;
+
+        // Display credentials
+        document.getElementById('access-key').textContent = accessKey;
+        document.getElementById('secret-key').textContent = secretKey;
+        document.getElementById('session-token').textContent = sessionToken;
+
+        // Expiry note
+        const expiryDate = new Date(expiry);
+        document.getElementById('expiry-note').textContent =
+          '⏱ Credentials expire at ' + expiryDate.toLocaleTimeString() +
+          ' (' + expiryDate.toLocaleDateString() + ')';
+
+        // DVC setup commands
+        document.getElementById('dvc-setup').textContent =
+          '# One-time remote setup (only needed once per project)\n' +
+          'dvc remote add -d myremote s3://' + CONFIG.dvcBucket + '\n' +
+          'dvc remote modify myremote endpointurl ' + CONFIG.dvcEndpointUrl + '\n\n' +
+          '# Set your temporary credentials\n' +
+          'dvc remote modify --local myremote access_key_id ' + accessKey + '\n' +
+          'dvc remote modify --local myremote secret_access_key ' + secretKey + '\n' +
+          'dvc remote modify --local myremote session_token ' + sessionToken;
+
+        // Environment variables
+        document.getElementById('env-vars').textContent =
+          'export AWS_ACCESS_KEY_ID=' + accessKey + '\n' +
+          'export AWS_SECRET_ACCESS_KEY=' + secretKey + '\n' +
+          'export AWS_SESSION_TOKEN=' + sessionToken + '\n' +
+          'export AWS_DEFAULT_REGION=' + CONFIG.region;
+
+        showView('credentials-view');
+
+        // Clean up the URL hash
+        history.replaceState(null, '', window.location.pathname);
+
+      } catch (err) {
+        console.error('Credential exchange failed:', err);
+        document.getElementById('error-message').textContent =
+          'Failed to get credentials: ' + (err.message || 'Unknown error');
+        showView('error-view');
+      }
+    }
+
+    // --- Parse hash fragment on page load ---
+    (function init() {
+      const hash = window.location.hash.substring(1);
+      if (!hash) {
+        showView('login-view');
+        return;
+      }
+
+      const params = new URLSearchParams(hash);
+      const idToken = params.get('id_token');
+
+      if (idToken) {
+        exchangeTokenForCredentials(idToken);
+      } else if (params.get('error')) {
+        document.getElementById('error-message').textContent =
+          decodeURIComponent(params.get('error_description') || params.get('error'));
+        showView('error-view');
+      } else {
+        showView('login-view');
+      }
+    })();
+  </script>
+</body>
+</html>
