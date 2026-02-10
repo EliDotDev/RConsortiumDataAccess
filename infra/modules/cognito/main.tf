@@ -32,7 +32,7 @@ resource "aws_cognito_user_pool" "main" {
   auto_verified_attributes = ["email"]
 
   admin_create_user_config {
-    allow_admin_create_user_only = true
+    # allow_admin_create_user_only = true # This is handled in the Lambda trigger, so we can leave this as false
   }
   # Password policy
   password_policy {
