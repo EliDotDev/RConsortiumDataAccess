@@ -12,13 +12,12 @@ terraform {
     }
   }
 
-  # Configure your Terraform Cloud backend here
-  # cloud {
-  #   organization = "your-org"
-  #   workspaces {
-  #     name = "rconsortium-pilots"
-  #   }
-  # }
+   cloud {
+     organization = "EliDotDev"
+     workspaces {
+       name = "RConsortiumPilotsApp"
+     }
+   }
 }
 
 provider "aws" {
