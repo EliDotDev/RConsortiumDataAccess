@@ -50,8 +50,8 @@ module "presignup_lambda" {
 module "cognito" {
   source                = "./modules/cognito"
   user_pool_name        = "dvc-users-${random_id.suffix.hex}"
-  callback_url          = "https://${module.callback_page.website_endpoint}/index.html"
-  logout_url            = "https://${module.callback_page.website_endpoint}/index.html"
+  callback_url          = "https://${module.callback_page.bucket_domain_name}/index.html"
+  logout_url            = "https://${module.callback_page.bucket_domain_name}/index.html"
   presignup_lambda_arn  = module.presignup_lambda.function_arn
   presignup_lambda_name = module.presignup_lambda.function_name
 }
@@ -84,4 +84,30 @@ module "callback_page" {
   aws_region        = var.aws_region
   dvc_bucket_name   = var.dvc_bucket_name
   dvc_endpoint_url  = "https://s3.${var.aws_region}.amazonaws.com"
+}
+
+# --- Outputs ---
+output "cognito_hosted_ui_url" {
+  description = "Cognito Hosted UI login URL - share this with collaborators"
+  value       = module.cognito.hosted_ui_url
+}
+
+output "callback_website_url" {
+  description = "Callback website URL where users get their credentials (HTTPS S3 endpoint)"
+  value       = "https://${module.callback_page.bucket_domain_name}/index.html"
+}
+
+output "cognito_user_pool_id" {
+  description = "Cognito User Pool ID (for admin tasks)"
+  value       = module.cognito.user_pool_id
+}
+
+output "cognito_identity_pool_id" {
+  description = "Cognito Identity Pool ID"
+  value       = module.cognito.identity_pool_id
+}
+
+output "dvc_bucket_name" {
+  description = "S3 bucket name for DVC data"
+  value       = module.dvc_bucket.bucket_name
 }

@@ -91,3 +91,7 @@ resource "aws_s3_object" "index" {
 output "website_endpoint" {
   value = aws_s3_bucket_website_configuration.callback.website_endpoint
 }
+
+output "bucket_domain_name" {
+  value = aws_s3_bucket.callback.bucket_domain_name
+}
