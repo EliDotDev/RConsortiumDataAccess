@@ -3,7 +3,7 @@ dvc_bucket_name = "rconsortium-pilots"
 
 allowed_emails = [
   "elimillera@gmail.com",
-  "ben.x.straub@gsk.com"
+  "benstraub28@gmail.com"
 ]
 
 # 8 hours in seconds
