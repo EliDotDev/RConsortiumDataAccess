@@ -13,7 +13,8 @@ allowed_emails = [
   "RMao6@ITS.JNJ.com",
   "dtord@its.jnj.com",
   "IAUGUSTY@its.jnj.com",
-"mdanbarasan@gmail.com"
+  "mdanbarasan@gmail.com",
+  "dtord@its.jnj.com"
 ]
 
 # 8 hours in seconds
